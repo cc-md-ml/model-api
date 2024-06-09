@@ -1,9 +1,0 @@
-steps:
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> $BASH_ENV
-    env:
-      - 'CLOUDSDK_CORE_DISABLE_PROMPTS=1'
