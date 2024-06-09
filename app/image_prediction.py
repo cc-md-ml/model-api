@@ -1,3 +1,4 @@
+from io import BytesIO
 from typing import Union
 import numpy as np
 import tensorflow as tf
@@ -35,9 +36,8 @@ class ImagePredictionService:
 
         self.img_size = 240
 
-    def predict(self, file) -> Union[str, dict]:
-        image = file.read()
-        img = self.load_and_preprocess_image(image)
+    def predict(self, img_data: BytesIO) -> Union[str, dict]:
+        img = self.load_and_preprocess_image(img_data)
         pred = self.model.predict(tf.expand_dims(img, axis=0))
 
         pred_class_encoded = np.argmax(pred)
@@ -50,7 +50,7 @@ class ImagePredictionService:
 
         return {"message": "Sorry, we don't have the data yet"}
 
-    def load_and_preprocess_image(self, image_data: bytes) -> tf.Tensor:
+    def load_and_preprocess_image(self, image_data: BytesIO) -> tf.Tensor:
         img = tf.io.decode_image(image_data, channels=3)
         img = tf.image.resize(img, (self.img_size, self.img_size))
         img = img / 255.0

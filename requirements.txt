@@ -1,5 +1,7 @@
 Flask
 gunicorn
+python-dotenv
+google-cloud-storage
 numpy==1.26.4
 tensorflow==2.15.0
 tensorflow-hub==0.16.1

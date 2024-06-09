@@ -15,6 +15,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Credential files
+*.json
+
 # Flask specific
 instance/
 *.pyc
