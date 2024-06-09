@@ -14,6 +14,10 @@ ENV/
 env.bak/
 venv.bak/
 
+# Credential files
+*.json
+
+
 # Ignore development and build files
 .idea/
 .vscode/
