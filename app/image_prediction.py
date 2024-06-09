@@ -51,6 +51,7 @@ class ImagePredictionService:
         return {"message": "Sorry, we don't have the data yet"}
 
     def load_and_preprocess_image(self, image_data: BytesIO) -> tf.Tensor:
+        image_data = image_data.read()
         img = tf.io.decode_image(image_data, channels=3)
         img = tf.image.resize(img, (self.img_size, self.img_size))
         img = img / 255.0
