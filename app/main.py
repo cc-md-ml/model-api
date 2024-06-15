@@ -7,8 +7,13 @@ from dotenv import load_dotenv
 main = Blueprint('main', __name__)
 
 load_dotenv()
-prediction_service = ImagePredictionService()
 storage_client = storage.Client()
+bucket = storage_client.bucket('c241-ps505-bucket')
+
+model_blob = bucket.blob('ml_model/final_model2.h5')
+model_file = BytesIO(model_blob.download_as_bytes())
+
+prediction_service = ImagePredictionService(model_file)
 
 @main.route('/api/predict', methods=['POST'])
 def predict_image():
@@ -18,8 +23,7 @@ def predict_image():
     filename = request.json['filename']
     
     try:
-        image_bucket = storage_client.bucket('c241-ps505-bucket')
-        img_blob = image_bucket.blob(f'upload_predicts/{filename}')
+        img_blob = bucket.blob(f'upload_predicts/{filename}')
         img_data = BytesIO(img_blob.download_as_bytes())
     except Exception as e:
         return jsonify({"detail": str(e)}), 400

@@ -6,35 +6,35 @@ from flask import request
 from .model_loader import ModelLoader
 
 class ImagePredictionService:
-    def __init__(self):
-        self.model = ModelLoader.load_model()
+    def __init__(self, model_file):
+        self.model = ModelLoader.load_model(model_file)
         self.label_mapping = {
-            0: 'Atopic Dermatitis ',
-            1: 'Basal Cell Carcinoma (BCC) ',
-            2: 'Benign Keratosis',
-            3: 'Eczema ',
-            4: 'Melanocytic Nevi (NV) ',
-            5: 'Melanoma ',
-            6: 'Psoriasis pictures Lichen Planus and related diseases ',
-            7: 'Seborrheic Keratoses and other Benign Tumors ',
-            8: 'Tinea Ringworm Candidiasis and other Fungal Infections ',
-            9: 'Warts Molluscum and other Viral Infections '
+            0: "Basal Cell Carcinoma",
+            1: "Melanoma",
+            2: "Viral Skin Infections",
+            3: "Benign Keratosis",
+            4: "Psoriasis, Lichen Planus, and related diseases",
+            5: "Melanocytic Nevi",
+            6: "Seborrheic Keratoses and other Benign Tumors",
+            7: "Fungal Skin Infections",
+            8: "Eczema",
+            9: "Atopic Dermatitis"
         }
 
         self.tresh_dict = {
-            'Atopic Dermatitis ': 0.9199999999999999,
-            'Basal Cell Carcinoma (BCC) ': 0.87,
-            'Benign Keratosis': 0.6399999999999999,
-            'Eczema ': 0.6699999999999999,
-            'Melanocytic Nevi (NV) ': 0.8099999999999999,
-            'Melanoma ': 0.71,
-            'Psoriasis pictures Lichen Planus and related diseases ': 0.5199999999999999,
-            'Seborrheic Keratoses and other Benign Tumors ': 0.6399999999999999,
-            'Tinea Ringworm Candidiasis and other Fungal Infections ': 0.84,
-            'Warts Molluscum and other Viral Infections ': 0.88
+            "Basal Cell Carcinoma": 0.6,
+            "Melanoma": 0.6,
+            "Viral Skin Infections": 0.8,
+            "Benign Keratosis": 0.7,
+            "Psoriasis, Lichen Planus, and related diseases": 0.7,
+            "Melanocytic Nevi": 0.5,
+            "Seborrheic Keratoses and other Benign Tumors": 0.6,
+            "Fungal Skin Infections": 0.5,
+            "Eczema": 0.8,
+            "Atopic Dermatitis":0.8
         }
 
-        self.img_size = 240
+        self.img_size = 260
 
     def predict(self, img_data: BytesIO) -> Union[str, dict]:
         img = self.load_and_preprocess_image(img_data)
@@ -54,5 +54,4 @@ class ImagePredictionService:
         image_data = image_data.read()
         img = tf.io.decode_image(image_data, channels=3)
         img = tf.image.resize(img, (self.img_size, self.img_size))
-        img = img / 255.0
         return img
